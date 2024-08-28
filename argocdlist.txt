@@ -1,0 +1,3 @@
+argocd argocd https://argocd-devtest.devtcb.opsmx.net description
+argocd1 argocd1 https://argocd1.argocd.opsmx.net desc
+NAME NS URL description
