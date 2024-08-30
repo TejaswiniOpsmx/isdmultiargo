@@ -167,15 +167,6 @@ sed -i "s#url: http://argocd-server:80#url: http://$argocdServiceName:80#" manif
 #kubectl apply -f manifest.yaml -n $argocdNS
 kubectl replace --force -f manifest.yaml -n $argocdNS
 
-# Get the pod name for the controller
-export controllerPod=$(kubectl get po -n $K8S_NAMESPACE | grep opsmx-controller-controller1 | awk '{print $1}')
-
-# Print the pod name (for debugging purposes)
-echo "Controller Pod: $controllerPod"
-
-# Delete the pod in the specified namespace
-kubectl delete po $controllerPod -n $K8S_NAMESPACE
-
 mv manifest.yaml ${argocdName}
 
 gitrepo=$( git config --get remote.origin.url )
@@ -192,3 +183,12 @@ argocd app get isdagent
 
 #################################################### Create K8s Secrets ##############################
 done < argocdlist.txt
+
+# Get the pod name for the controller
+export controllerPod=$(kubectl get po -n $K8S_NAMESPACE | grep opsmx-controller-controller1 | awk '{print $1}')
+
+# Print the pod name (for debugging purposes)
+echo "Controller Pod: $controllerPod"
+
+# Delete the pod in the specified namespace
+kubectl delete po $controllerPod -n $K8S_NAMESPACE
