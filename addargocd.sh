@@ -164,6 +164,8 @@ safe_token=$(echo "$cleanedToken" | sed 's/[&/\]/\\&/g')
 sed -i "s|token: ARGOCD_TOKEN_WITH_BASE64ENCODED|token: $safe_token|" manifest.yaml
 sed -i "s#url: http://argocd-server:80#url: http://$argocdServiceName:80#" manifest.yaml
 
+kubectl apply -f manifest.yaml -n $argocdName
+
 mv manifest.yaml ${argocdName}
 
 gitrepo=$( git config --get remote.origin.url )
