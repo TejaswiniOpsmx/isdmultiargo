@@ -79,7 +79,10 @@ if [ $httpCode != "200" ]; then
     cat output.json >> errorlist.txt
     continue
 fi 
-
+echo "argocdName: $argocdName"
+echo "argocdNS: $argocdNS"
+echo "argocdDesc: $argocdDesc"
+echo "argocdURL: $argocdURL"
 if grep -q "$teststring" output.json; then 
     echo "$argocdName was already added"
     cat output.json
