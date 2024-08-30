@@ -140,7 +140,8 @@ fi
 
 argocdtoken=$(argocd account generate-token)
 # Base64 encoding the token and removing spaces
-encodedToken=$(echo -n "$argocdtoken" | base64 | tr -d ' ')
+encodedToken=$(echo -n "$argocdtoken" | base64 )
+cleanedToken=$(echo "$encodedToken" | tr -d '[:space:]')
 
 
 if [ -z "$encodedToken" ]; then
@@ -155,7 +156,8 @@ echo
 
 fi
 
-safe_token=$(echo "$encodedToken" | sed 's/[&/\ ]/\\&/g')
+# Remove spaces using sed
+safe_token=$(echo "$cleanedToken" | sed 's/[&/\]/\\&/g')
 
 
 # Using a safer delimiter if needed
