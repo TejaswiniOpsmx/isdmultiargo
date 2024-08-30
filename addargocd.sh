@@ -79,7 +79,7 @@ if [ $httpCode != "200" ]; then
     cat output.json >> errorlist.txt
     continue
 fi 
-
+echo "$argocdName ****"
 # Function to URL-encode a string
 urlencode() {
   local encoded=""
@@ -93,7 +93,7 @@ urlencode() {
   done
   echo "$encoded"
 }
-
+echo "$argocdName ****"
 encodedName=$(urlencode "$argocdName")
 encodedNS=$(urlencode "$argocdNS")
 encodedDesc=$(urlencode "$argocdDesc")
