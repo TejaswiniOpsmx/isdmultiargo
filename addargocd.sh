@@ -79,10 +79,25 @@ if [ $httpCode != "200" ]; then
     cat output.json >> errorlist.txt
     continue
 fi 
-echo "argocdName: $argocdName"
-echo "argocdNS: $argocdNS"
-echo "argocdDesc: $argocdDesc"
-echo "argocdURL: $argocdURL"
+
+# Function to URL-encode a string
+urlencode() {
+  local encoded=""
+  local i
+  for (( i=0; i<${#1}; i++ )); do
+    local c="${1:i:1}"
+    case $c in
+      [a-zA-Z0-9.~_-]) encoded+="$c" ;;
+      *) encoded+=$(printf '%%%02X' "'$c") ;;
+    esac
+  done
+  echo "$encoded"
+}
+
+encodedName=$(urlencode "$argocdName")
+encodedNS=$(urlencode "$argocdNS")
+encodedDesc=$(urlencode "$argocdDesc")
+encodedURL=$(urlencode "$argocdURL")
 if grep -q "$teststring" output.json; then 
     echo "$argocdName was already added"
     cat output.json
