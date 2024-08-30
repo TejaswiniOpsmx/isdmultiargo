@@ -22,11 +22,11 @@ stringData:
         type: argocd
         enabled: true
         config:
-          url: http://argocd-server:80
+          url: http://argocd-2-11-4-server:80
           insecure: true
           credentials:
             type: bearer
-            token: ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKaGNtZHZZMlFpTENKemRXSWlPaUpoWkcxcGJqcGhjR2xMWlhraUxDSnVZbVlpT2pFM01qVXdNVEl3TkRBc0ltbGhkQ0k2TVRjeU5UQXhNakEwTUN3aWFuUnBJam9pTkdKaFpERTRObUV0T1RZMU1DMDBabUZqTFdJNE1USXRZamcyTmpVMk5qazFaRGcwSW4wLlRBakZnbVFzNHh0VURUSjJ1V3R6ZXJfTkZhT1FWV1J0TmxvY0RsY1g5WEk=
+            token: ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKaGNtZHZZMlFpTENKemRXSWlPaUpoWkcxcGJqcGhjR2xMWlhraUxDSnVZbVlpT2pFM01qVXdNVEl5TnpFc0ltbGhkQ0k2TVRjeU5UQXhNakkzTVN3aWFuUnBJam9pTnpCa05qVTJOamd0Tm1KbU5pMDBZelF5TFdGaFlqa3RNamszWVdZMk9EZ3pOVFExSW4wLkFSUk9Remd3VVJObk5ITWJudDBSN2U0UTBhXzFFSnA5M3NJTmhDWmVoMms=
         annotations:
           description: argocd via agent
           uiUrl: https://argocd-2-11-4.jpmc.opsmx.net
@@ -195,7 +195,7 @@ metadata:
     agent.opsmx.com/name: argocd-2-11-4-opsmx-agent
     agent.opsmx.com/role: agent
 data:
-  authtoken: ZXlKaGJHY2lPaUpJVXpJMU5pSXNJbXRwWkNJNkltRjFkR2gwYjJ0bGJpSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBZWFFpT2pFM01qVXdNVEl3TXpFc0ltbHpjeUk2SW05d2MyMTRMV0ZuWlc1MExXRjFkR2dpTENKdmNITnRlQzVoWjJWdWRDNXVZVzFsSWpvaVlYSm5iMk5rTFRJdE1URXROQzF2Y0hOdGVDMWhaMlZ1ZENJc0ltOXdjMjE0TG5CMWNuQnZjMlVpT2lKaFoyVnVkQ0o5LmFaU0lKekpkOGM4RVVzOXNTZFpoQzY4aU0wU3pEc0pYM3lMOHNvenVVZHc=
+  authtoken: ZXlKaGJHY2lPaUpJVXpJMU5pSXNJbXRwWkNJNkltRjFkR2gwYjJ0bGJpSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBZWFFpT2pFM01qVXdNVEl5TmpJc0ltbHpjeUk2SW05d2MyMTRMV0ZuWlc1MExXRjFkR2dpTENKdmNITnRlQzVoWjJWdWRDNXVZVzFsSWpvaVlYSm5iMk5rTFRJdE1URXROQzF2Y0hOdGVDMWhaMlZ1ZENJc0ltOXdjMjE0TG5CMWNuQnZjMlVpT2lKaFoyVnVkQ0o5Lm5aYVREaVRxbTBQTEdNQXZacTE1LWJiT2hrMExCOXUxX2dIX09ld3ZmWGc=
 ---
 apiVersion: apps/v1
 kind: Deployment
