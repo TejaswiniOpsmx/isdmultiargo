@@ -154,7 +154,9 @@ else
 echo
 
 fi
+echo "sed -i 's|ARGOCD_TOKEN_WITH_BASE64ENCODED|$encodedToken|' manifest.yaml"
 sed -i "s|ARGOCD_TOKEN_WITH_BASE64ENCODED|$encodedToken|" manifest.yaml
+
 
 sed -i "s#url: http://argocd-server:80#url: http://$argocdServiceName:80#" manifest.yaml
 mv manifest.yaml ${argocdName}
