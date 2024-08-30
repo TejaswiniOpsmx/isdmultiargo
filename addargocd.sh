@@ -156,7 +156,7 @@ echo
 fi
 
 # Using a safer delimiter if needed
-sed -i "s|ARGOCD_TOKEN_WITH_BASE64ENCODED|$encodedToken|" manifest.yaml
+sed -i "s|token: ARGOCD_TOKEN_WITH_BASE64ENCODED|token: $encodedToken|" manifest.yaml
 
 mv manifest.yaml ${argocdName}
 
