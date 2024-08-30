@@ -26,7 +26,7 @@ stringData:
           insecure: true
           credentials:
             type: bearer
-            token: ARGOCD_TOKEN_WITH_BASE64ENCODED
+            token: $encodedToken
         annotations:
           description: argocd via agent
           uiUrl: https://argocd-2-12-0.devops.opsmx.org
@@ -195,7 +195,7 @@ metadata:
     agent.opsmx.com/name: argocd-2-12-0-opsmx-agent
     agent.opsmx.com/role: agent
 data:
-  authtoken: ZXlKaGJHY2lPaUpJVXpJMU5pSXNJbXRwWkNJNkltRjFkR2gwYjJ0bGJpSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBZWFFpT2pFM01qVXdNRFEwTWpZc0ltbHpjeUk2SW05d2MyMTRMV0ZuWlc1MExXRjFkR2dpTENKdmNITnRlQzVoWjJWdWRDNXVZVzFsSWpvaVlYSm5iMk5rTFRJdE1USXRNQzF2Y0hOdGVDMWhaMlZ1ZENJc0ltOXdjMjE0TG5CMWNuQnZjMlVpT2lKaFoyVnVkQ0o5LnlZMXVEMWVaajlESXFQbE5zVGJLb3NwWGpxQVZiQnFVRlVVcnROZEZYSlU=
+  authtoken: ZXlKaGJHY2lPaUpJVXpJMU5pSXNJbXRwWkNJNkltRjFkR2gwYjJ0bGJpSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBZWFFpT2pFM01qVXdNRFE1TURjc0ltbHpjeUk2SW05d2MyMTRMV0ZuWlc1MExXRjFkR2dpTENKdmNITnRlQzVoWjJWdWRDNXVZVzFsSWpvaVlYSm5iMk5rTFRJdE1USXRNQzF2Y0hOdGVDMWhaMlZ1ZENJc0ltOXdjMjE0TG5CMWNuQnZjMlVpT2lKaFoyVnVkQ0o5Lm0tM1JzSGdWLUFDWmMxUjFQbXNINi1BdFcxQmF0dDAtbFVPV2tUWFd2VUk=
 ---
 apiVersion: apps/v1
 kind: Deployment
