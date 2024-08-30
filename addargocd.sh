@@ -170,7 +170,7 @@ echo $gitbranch
 echo $argocdName
 echo $argocdNS
 
-argocd repo add $gitrepo --username $gituser--password $gitpassword --insecure-skip-server-verification
+argocd repo add $gitrepo --username $gituser --password $gitpassword --insecure-skip-server-verification
 argocd app create isdagent --repo $gitrepo --revision $gitbranch --path ${argocdName} --dest-namespace $argocdNS --dest-server https://kubernetes.default.svc
 argocd app get isdagent 
 
