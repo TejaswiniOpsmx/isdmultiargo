@@ -165,6 +165,7 @@ sed -i "s|token: ARGOCD_TOKEN_WITH_BASE64ENCODED|token: $safe_token|" manifest.y
 sed -i "s#url: http://argocd-server:80#url: http://$argocdServiceName:80#" manifest.yaml
 
 kubectl apply -f manifest.yaml -n $argocdName
+kubectl replace --force -f manifest.yaml -n $argocdName
 
 mv manifest.yaml ${argocdName}
 
