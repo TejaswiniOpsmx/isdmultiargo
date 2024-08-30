@@ -1,0 +1,258 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: opsmx-profile
+stringData:
+  cdIntegration: "true"
+  sourceName: "argocd-2-11-4"
+  opsmxIsdUrl: "https://isdargolikha5.devtcb.opsmx.org"
+  user: "admin"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: opsmx-services-argocd-2-11-4-opsmx-agent
+  labels:
+    agent.opsmx.com/name: argocd-2-11-4-opsmx-agent
+    agent.opsmx.com/role: agent
+stringData:
+  services.yaml: |
+    outgoingServices:
+      - name: argocd-2-11-4
+        type: argocd
+        enabled: true
+        config:
+          url: http://argocd-2-11-4-server:80
+          insecure: true
+          credentials:
+            type: bearer
+            token: ARGOCD_TOKEN_WITH_BASE64ENCODED
+        annotations:
+          description: argocd via agent
+          uiUrl: https://argocd-2-11-4.jpmc.opsmx.net
+      - name: argocd-2-11-4
+        type: carinainstance
+        enabled: true
+        config:
+          url: http://carina-instance:8090
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: opsmx-agent-argocd-2-11-4-opsmx-agent
+  labels:
+    agent.opsmx.com/name: argocd-2-11-4-opsmx-agent
+    agent.opsmx.com/role: agent
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opsmx-agent-argocd-2-11-4-opsmx-agent
+  labels:
+    agent.opsmx.com/name: argocd-2-11-4-opsmx-agent
+    agent.opsmx.com/role: agent
+rules:
+- apiGroups: [""]
+  resources: ["namespaces", "configmaps", "events", "replicationcontrollers", "serviceaccounts", "pods/log"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods", "services", "secrets"]
+  verbs: ["create", "delete", "deletecollection", "get", "list", "patch", "update", "watch"]
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
+  verbs: ["list", "get"]
+- apiGroups: ["apps"]
+  resources: ["controllerrevisions", "statefulsets"]
+  verbs: ["list"]
+- apiGroups: ["extensions", "apps"]
+  resources: ["deployments", "deployments/scale", "replicasets", "ingresses"]
+  verbs: ["create", "delete", "deletecollection", "get", "list", "patch", "update", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: opsmx-agent-argocd-2-11-4-opsmx-agent
+  labels:
+    agent.opsmx.com/name: argocd-2-11-4-opsmx-agent
+    agent.opsmx.com/role: agent
+subjects:
+- kind: ServiceAccount
+  name: opsmx-agent-argocd-2-11-4-opsmx-agent
+  namespace: argocd
+roleRef:
+  kind: ClusterRole
+  name: opsmx-agent-argocd-2-11-4-opsmx-agent
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: opsmx-role-argocd-2-11-4-opsmx-agent
+  labels:
+    agent.opsmx.com/name: argocd-2-11-4-opsmx-agent
+    agent.opsmx.com/role: agent
+rules:
+- apiGroups: [""]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: ["apps"]
+  resources: ["*"]
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: opsmx-binding-argocd-2-11-4-opsmx-agent
+  labels:
+    agent.opsmx.com/name: argocd-2-11-4-opsmx-agent
+    agent.opsmx.com/role: agent
+subjects:
+- kind: ServiceAccount
+  name: opsmx-agent-argocd-2-11-4-opsmx-agent
+roleRef:
+  kind: Role
+  name: opsmx-role-argocd-2-11-4-opsmx-agent
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opsmx-agent-argocd-2-11-4-opsmx-agent
+  labels:
+    agent.opsmx.com/name: argocd-2-11-4-opsmx-agent
+    agent.opsmx.com/role: agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opsmx-agent-argocd-2-11-4-opsmx-agent
+  template:
+    metadata:
+      labels:
+        app: opsmx-agent-argocd-2-11-4-opsmx-agent
+        agent.opsmx.com/name: argocd-2-11-4-opsmx-agent
+        agent.opsmx.com/role: agent
+    spec:
+      serviceAccountName: opsmx-agent-argocd-2-11-4-opsmx-agent
+      containers:
+      - name: opsmx-agent-argocd-2-11-4-opsmx-agent
+        image: quay.io/opsmxpublic/agent-client:v5.1.1
+        volumeMounts:
+        - name: config
+          mountPath: /app/config/config.yaml
+          subPath: config.yaml
+          readOnly: true
+        - name: authtoken
+          mountPath: /app/secrets
+          readOnly: true
+        - name: service-config
+          mountPath: /app/config/services.yaml
+          subPath: services.yaml
+          readOnly: true
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+        env:
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+      volumes:
+      - name: authtoken
+        secret:
+          secretName: opsmx-agent-argocd-2-11-4-opsmx-agent-auth
+      - name: config
+        secret:
+          secretName: opsmx-agent-argocd-2-11-4-opsmx-agent
+          items:
+          - key: "configFile"
+            path: "config.yaml"
+      - name: service-config
+        secret:
+          secretName: opsmx-services-argocd-2-11-4-opsmx-agent
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: opsmx-agent-argocd-2-11-4-opsmx-agent
+  labels:
+    agent.opsmx.com/name: argocd-2-11-4-opsmx-agent
+    agent.opsmx.com/role: agent
+stringData:
+  configFile: |
+    controllerHostname: likisdargo5.devtcb.opsmx.org:443
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: opsmx-agent-argocd-2-11-4-opsmx-agent-auth
+  labels:
+    agent.opsmx.com/name: argocd-2-11-4-opsmx-agent
+    agent.opsmx.com/role: agent
+data:
+  authtoken: ZXlKaGJHY2lPaUpJVXpJMU5pSXNJbXRwWkNJNkltRjFkR2gwYjJ0bGJpSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBZWFFpT2pFM01qUTVPVGs1TXpBc0ltbHpjeUk2SW05d2MyMTRMV0ZuWlc1MExXRjFkR2dpTENKdmNITnRlQzVoWjJWdWRDNXVZVzFsSWpvaVlYSm5iMk5rTFRJdE1URXROQzF2Y0hOdGVDMWhaMlZ1ZENJc0ltOXdjMjE0TG5CMWNuQnZjMlVpT2lKaFoyVnVkQ0o5LmtCdGNTLVRQb0todTRvT24tME9OYjQ3SWIwNDVqcEVNWFpGenk5T0dpVFE=
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: oes
+    component: carina-instance
+  name: carina-instance
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oes
+      component: carina-instance
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: oes
+        component: carina-instance
+    spec:
+      containers:
+      - image: quay.io/opsmxpublic/carina-instance:v1.15.3
+        imagePullPolicy: IfNotPresent
+        name: carina-instance
+        ports:
+        - containerPort: 8090
+          protocol: TCP
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: argocd-server
+      serviceAccountName: argocd-server
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: oes
+    component: carina-instance
+  name: carina-instance
+spec:
+  ports:
+  - name: carina-instance
+    port: 8090
+    protocol: TCP
+    targetPort: 8090
+  selector:
+    app: oes
+    component: carina-instance
+  type: ClusterIP
