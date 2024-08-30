@@ -168,6 +168,7 @@ sed -i "s#url: http://argocd-server:80#url: http://$argocdServiceName:80#" manif
 kubectl replace --force -f manifest.yaml -n $argocdNS
 
 export controllerPod=$(kubectl get po -n K8S_NAMESPACE | grep opsmx-controller-controller1)
+echo $controllerPod
 kubectl get po $controllerPod -n K8S_NAMESPACE
 mv manifest.yaml ${argocdName}
 
