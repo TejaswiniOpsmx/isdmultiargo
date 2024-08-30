@@ -60,6 +60,7 @@ argocdName=$(echo $argo | awk '{print $1}')
 argocdNS=$(echo $argo | awk '{print $2}')
 argocdURL=$(echo $argo | awk '{print $3}')
 argocdDesc=$(echo $argo | awk '{print $4}')
+argocdServiceName=$(echo $argo | awk '{print $5}')
 
 mkdir -p ${argocdName}
 
@@ -138,19 +139,21 @@ if [ $? -ne '0' ]; then
 fi 
 
 argocdtoken=$(argocd account generate-token)
-if [ -z $argocdpassword ]; then
+encodedToken=$(echo -n "$argocdtoken" | base64)
+if [ -z "$encodedToken" ]; then
   echo "Failed to generate token, but the script will continue."
-  argocdtoken=""  # Optionally set a default or empty value.
+  encodedToken=""  # Optionally set a default or empty value.
   continue
 else
   echo
   echo "Token generated successfully."
-  echo $argocdtoken is the token
+  echo $encodedToken is the token
 echo
 
 fi
 
-sed -i "s/ARGOCD_TOKEN_WITH_BASE64ENCODED/$argocdtoken/" manifest.yaml
+sed -i "s/ARGOCD_TOKEN_WITH_BASE64ENCODED/$encodedToken/" manifest.yaml
+sed -i "s#url: http://argocd-server:80#url: http://$argocdServiceName:80#" manifest.yaml
 mv manifest.yaml ${argocdName}
 
 gitrepo=$( git config --get remote.origin.url )
