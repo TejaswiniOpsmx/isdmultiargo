@@ -139,8 +139,9 @@ if [ $? -ne '0' ]; then
 fi 
 
 argocdtoken=$(argocd account generate-token)
+# Base64 encoding the token and removing spaces
 encodedToken=$(echo -n "$argocdtoken" | base64 | tr -d ' ')
-# Escape special characters in the encodedToken
+
 
 if [ -z "$encodedToken" ]; then
   echo "Failed to generate token, but the script will continue."
@@ -153,7 +154,10 @@ else
 echo
 
 fi
+
+# Using a safer delimiter if needed
 sed -i "s|ARGOCD_TOKEN_WITH_BASE64ENCODED|$encodedToken|" manifest.yaml
+
 mv manifest.yaml ${argocdName}
 
 gitrepo=$( git config --get remote.origin.url )
