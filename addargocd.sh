@@ -153,8 +153,7 @@ else
 echo
 
 fi
-echo "sed -i 's|ARGOCD_TOKEN_WITH_BASE64ENCODED|$encodedToken|' manifest.yaml"
-
+sed -i 's|ARGOCD_TOKEN_WITH_BASE64ENCODED|$encodedToken|' manifest.yaml
 mv manifest.yaml ${argocdName}
 
 gitrepo=$( git config --get remote.origin.url )
@@ -163,6 +162,13 @@ gitbranch=$( git rev-parse --abbrev-ref HEAD )
 git add -A
 git commit -m " added manifest for $argocdName"
 git push
+
+echo $gitrepo 
+echo $gituser
+echo $gitpassword
+echo $gitbranch
+echo $argocdName
+echo $argocdNS
 
 argocd repo add $gitrepo --username $gituser--password $gitpassword --insecure-skip-server-verification
 argocd app create isdagent --repo $gitrepo --revision $gitbranch --path ${argocdName} --dest-namespace $argocdNS --dest-server https://kubernetes.default.svc
