@@ -140,6 +140,9 @@ fi
 
 argocdtoken=$(argocd account generate-token)
 encodedToken=$(echo -n "$argocdtoken" | base64)
+# Escape special characters in the encodedToken
+encodedToken=$(echo "$encodedToken" | sed 's/[\/&]/\\&/g')
+
 if [ -z "$encodedToken" ]; then
   echo "Failed to generate token, but the script will continue."
   encodedToken=""  # Optionally set a default or empty value.
