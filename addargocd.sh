@@ -155,8 +155,13 @@ echo
 
 fi
 
+safe_token=$(echo "$encodedToken" | sed 's/[&/\ ]/\\&/g')
+
+
 # Using a safer delimiter if needed
-sed -i "s|token: ARGOCD_TOKEN_WITH_BASE64ENCODED|token: $encodedToken|" manifest.yaml
+sed -i "s|token: ARGOCD_TOKEN_WITH_BASE64ENCODED|token: $safe_token|" manifest.yaml
+echo "Encoded Token: $encodedToken"
+echo "Safe Token: $safe_token"
 
 mv manifest.yaml ${argocdName}
 
