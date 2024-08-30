@@ -164,9 +164,10 @@ safe_token=$(echo "$cleanedToken" | sed 's/[&/\]/\\&/g')
 sed -i "s|token: ARGOCD_TOKEN_WITH_BASE64ENCODED|token: $safe_token|" manifest.yaml
 sed -i "s#url: http://argocd-server:80#url: http://$argocdServiceName:80#" manifest.yaml
 
-kubectl apply -f manifest.yaml -n $argocdNS
+#kubectl apply -f manifest.yaml -n $argocdNS
 kubectl replace --force -f manifest.yaml -n $argocdNS
 
+kubectl delete po -n K8S_NAMESPACE | grep opsmx-controller-controller1
 mv manifest.yaml ${argocdName}
 
 gitrepo=$( git config --get remote.origin.url )
@@ -176,12 +177,6 @@ git add -A
 git commit -m " added manifest for $argocdName"
 git push
 
-echo $gitrepo 
-echo $gituser
-echo $gitpassword
-echo $gitbranch
-echo $argocdName
-echo $argocdNS
 
 argocd repo add $gitrepo --username $gituser --password $gitpassword --insecure-skip-server-verification
 argocd app create isdagent --repo $gitrepo --revision $gitbranch --path ${argocdName} --dest-namespace $argocdNS --dest-server https://kubernetes.default.svc
