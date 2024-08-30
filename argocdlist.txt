@@ -1,2 +1,4 @@
 argocd argocd https://argocd-devtest.devtcb.opsmx.net description argocd-server
 argocd1 argocd1 https://argocd1.argocd.opsmx.net desc argocd-server
+argocd-2-12-0 argocd https://argocd-2-12-0.devops.opsmx.org argocd-2-12-0 argocd-2-12-0-server
+argocd-2-11-4 argocd https://argocd-2-11-4.jpmc.opsmx.net argocd-2-11-4 argocd-2-11-4-server
