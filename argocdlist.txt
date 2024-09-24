@@ -1,4 +1,5 @@
-argocd argocd https://argocd-devtest.devtcb.opsmx.net description argocd-server
-argocd1 argocd1 https://argocd1.argocd.opsmx.net desc argocd-server
-argocd-2-11-4 argocd https://argocd-2-11-4.jpmc.opsmx.net argocd-2-11-4 argocd-2-11-4-server
-argocd-2-12-3 argocd https://argocd-2-12-3.devops.opsmx.org argocd-2-12-3 argocd-2-12-3-server
+argocd1 argocd https://argocd1-vcluster-ingress.argocd.opsmx.net argocd1-vcluster argocd1-vcluster-argocd-server
+argocd2 argocd https://argocd2-vcluster-ingress.argocd.opsmx.net argocd2-vcluster argocd2-vcluster-argocd-server
+argocd3 argocd https://argocd3-vcluster-ingress.argocd.opsmx.net argocd3-vcluster argocd3-vcluster-argocd-server
+argocd4 argocd https://argocd4-vcluster-ingress.argocd.opsmx.net argocd4-vcluster argocd4-vcluster-argocd-server
+NAME NS URL description argocd-server-service

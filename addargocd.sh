@@ -1,7 +1,7 @@
 #!/bin/bash
 ############################################## Set These Parameters ####################
-export opsmxIsdUrl=https://isdargolikha5.devtcb.opsmx.org 
-export K8S_NAMESPACE=isdupg
+export opsmxIsdUrl=https://isd2408.argocd.opsmx.net
+export K8S_NAMESPACE=isd2408
 export K8S_SECRET_NAME=multiargo
 
 ###################################
@@ -24,13 +24,13 @@ if [ $? -ne '0' ]; then
     exit 1
 fi
 
-export gituser=$(kubectl get secret  pubgitsecret -n $K8S_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
+export gituser=$(kubectl get secret  git-secret -n $K8S_NAMESPACE -o jsonpath='{.data.username}' | base64 --decode)
 if [ $? -ne '0' ]; then 
     echo "ERROR: could not get gituser"
     exit 1
 fi
 
-export gitpassword=$(kubectl get secret pubgitsecret -n $K8S_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
+export gitpassword=$(kubectl get secret git-secret -n $K8S_NAMESPACE -o jsonpath='{.data.password}' | base64 --decode)
 if [ $? -ne '0' ]; then 
     echo "ERROR: could not get gitpassword"
     exit 1
@@ -108,7 +108,7 @@ fi
 if kubectl get secret $argocdName -n $K8S_NAMESPACE ; then
 echo secret exists
 else 
-please create secret for $argocdName for the username and password 
+echo please create secret for $argocdName for the username and password 
 continue
 fi
 
@@ -125,11 +125,12 @@ if [ -z $argocdpassword ]; then
     continue
 fi 
 
+#################################################### Get ArgoCD Token ##############################
+echo argocd url is $argocdURL
+justURL=$(echo $argocdURL | sed 's@https://@@')
 echo
 echo $justURL --username=$argocduser --password=$argocdpassword  is being used
 echo
-#################################################### Get ArgoCD Token ##############################
-justURL=$(echo $argocdURL | sed 's@https://@@')
 argocd login $justURL --username=$argocduser --password=$argocdpassword --grpc-web --insecure
 if [ $? -ne '0' ]; then 
     echo "ERROR: could not login to argocd $argocdURL, check if username and password are correct"
@@ -178,7 +179,7 @@ git push
 
 
 argocd repo add $gitrepo --username $gituser --password $gitpassword --insecure-skip-server-verification
-argocd app create isdagent --repo $gitrepo --revision $gitbranch --path ${argocdName} --dest-namespace $argocdNS --dest-server https://kubernetes.default.svc
+argocd app create isdagent --repo $gitrepo --revision $gitbranch --path ${argocdName} --dest-namespace $argocdNS --dest-server https://kubernetes.default.svc --upsert --sync-policy automated
 argocd app get isdagent 
 
 #################################################### Create K8s Secrets ##############################

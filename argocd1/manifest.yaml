@@ -5,7 +5,7 @@ metadata:
 stringData:
   cdIntegration: "true"
   sourceName: "argocd1"
-  opsmxIsdUrl: "https://isdargolikha5.devtcb.opsmx.org"
+  opsmxIsdUrl: "https://isd2408.argocd.opsmx.net"
   user: "admin"
 ---
 apiVersion: v1
@@ -22,14 +22,14 @@ stringData:
         type: argocd
         enabled: true
         config:
-          url: http://argocd-server:80
+          url: http://argocd1-vcluster-argocd-server:80
           insecure: true
           credentials:
             type: bearer
-            token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcmdvY2QiLCJzdWIiOiJhZG1pbjphcGlLZXkiLCJuYmYiOjE3MjQ4Mzg5OTMsImlhdCI6MTcyNDgzODk5MywianRpIjoiM2RmZTQyM2MtMzJlZS00NjA0LWI0MjQtNjlmMGRmNzY2YzBjIn0.GErpa2BzjHA3E_EJKY-NtfOAwf2tT3jSrsQ58zKNseE
+            token: ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKaGNtZHZZMlFpTENKemRXSWlPaUpoWkcxcGJqcGhjR2xMWlhraUxDSnVZbVlpT2pFM01qY3hOVGt4TlRRc0ltbGhkQ0k2TVRjeU56RTFPVEUxTkN3aWFuUnBJam9pT0daa1pqY3dOR1V0WTJFM1lpMDBOams1TFRrM1ltVXROR1V5TmpReE1UQXlOekkzSW4wLlhlbEUwa1ZfU2tJLWhuNzJsR1VrUDIwc1J1QnktNVFjUEE2N0UxNklMeEk=
         annotations:
           description: argocd via agent
-          uiUrl: https://argocd1.argocd.opsmx.net
+          uiUrl: https://argocd1-vcluster-ingress.argocd.opsmx.net
       - name: argocd1
         type: carinainstance
         enabled: true
@@ -78,7 +78,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: opsmx-agent-argocd1-opsmx-agent
-  namespace: argocd1
+  namespace: argocd
 roleRef:
   kind: ClusterRole
   name: opsmx-agent-argocd1-opsmx-agent
@@ -184,7 +184,7 @@ metadata:
     agent.opsmx.com/role: agent
 stringData:
   configFile: |
-    controllerHostname: likisdargo5.devtcb.opsmx.org:443
+    controllerHostname: isd2408controller.argocd.opsmx.net:443
 ---
 apiVersion: v1
 kind: Secret
@@ -195,7 +195,7 @@ metadata:
     agent.opsmx.com/name: argocd1-opsmx-agent
     agent.opsmx.com/role: agent
 data:
-  authtoken: ZXlKaGJHY2lPaUpJVXpJMU5pSXNJbXRwWkNJNkltRjFkR2gwYjJ0bGJpSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBZWFFpT2pFM01qUTRNemc1T0RRc0ltbHpjeUk2SW05d2MyMTRMV0ZuWlc1MExXRjFkR2dpTENKdmNITnRlQzVoWjJWdWRDNXVZVzFsSWpvaVlYSm5iMk5rTVMxdmNITnRlQzFoWjJWdWRDSXNJbTl3YzIxNExuQjFjbkJ2YzJVaU9pSmhaMlZ1ZENKOS4tamg0dUtNYkJoN3dVMTJFM1RiU0FCM0t5NHFaWlM4b283cWdXYVFiY2cw
+  authtoken: ZXlKaGJHY2lPaUpJVXpJMU5pSXNJbXRwWkNJNkltRjFkR2gwYjJ0bGJpSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBZWFFpT2pFM01qY3hOVGt4TkRVc0ltbHpjeUk2SW05d2MyMTRMV0ZuWlc1MExXRjFkR2dpTENKdmNITnRlQzVoWjJWdWRDNXVZVzFsSWpvaVlYSm5iMk5rTVMxdmNITnRlQzFoWjJWdWRDSXNJbTl3YzIxNExuQjFjbkJ2YzJVaU9pSmhaMlZ1ZENKOS5ETTYyQnZrbkhneGw3M1NXU2VMdk9lZnRDMGJJZHdKN2FqNU5rZU4xT3Iw
 ---
 apiVersion: apps/v1
 kind: Deployment
